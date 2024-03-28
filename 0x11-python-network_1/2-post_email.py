@@ -1,22 +1,19 @@
 #!/usr/bin/python3
 """
-script that takes in a URL and an email, sends a POST
-request to the passed URL with the email as a parameter,
+Sends a POST request to the passed URL with the email as a parameter,
 and displays the body of the response (decoded in utf-8)
 """
-import urllib.request
-import sys
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    import urllib.request
+    import urllib.parse
+    import sys
 
-    url = sys.argv[1]
-    email = sys.argv[2]
+    argv = sys.argv
+    url = argv[1]
+    email = argv[2]
+    DATA = urllib.parse.urlencode({"email": email})
+    DATA = DATA.encode('ascii')
 
-    data = "email=" + urllib.parse.quote_plus(email)
-
-    req = urllib.request.Request(url, data=data.encode('utf-8'), method='POST')
-
-    with urllib.request.urlopen(req) as response:
-        response_body = response.read().decode('utf-8')
-
-        print(response_body)
+    with urllib.request.urlopen(url, DATA) as response:
+        print(response.read().decode('utf-8'))
